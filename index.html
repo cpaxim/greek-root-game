@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greek Root Word Game</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .word-list { margin: 20px auto; width: 300px; }
+        .word { display: block; margin: 5px; }
+        button { margin-top: 20px; padding: 10px; }
+        .correct { text-decoration: underline; color: green; }
+        .incorrect { text-decoration: line-through; color: red; }
+    </style>
+</head>
+<body>
+    <h1>Greek Root Word Game</h1>
+    <p>Select the words that have Greek roots.</p>
+    <div class="word-list" id="word-list"></div>
+    <button onclick="checkAnswers()">Check Score</button>
+    <button onclick="resetGame()">Play Again</button>
+    <p id="result"></p>
+    
+    <script>
+        const words = [
+            { word: "Philosophy", greek: true },
+            { word: "Democracy", greek: true },
+            { word: "School", greek: true },
+            { word: "Computer", greek: false },
+            { word: "Telephone", greek: true },
+            { word: "Library", greek: false },
+            { word: "Music", greek: true },
+            { word: "Television", greek: false },
+            { word: "Physics", greek: true },
+            { word: "Hotel", greek: false },
+            { word: "Automobile", greek: true },
+            { word: "History", greek: true },
+            { word: "Planet", greek: true },
+            { word: "Energy", greek: true },
+            { word: "Restaurant", greek: false },
+            { word: "Galaxy", greek: true },
+            { word: "Police", greek: false },
+            { word: "Drama", greek: true },
+            { word: "Economy", greek: true },
+            { word: "Architecture", greek: true },
+            { word: "Strategy", greek: true },
+            { word: "Analysis", greek: true },
+            { word: "Geography", greek: true },
+            { word: "Dinosaur", greek: true },
+            { word: "Astronomy", greek: true },
+            { word: "Telescope", greek: true },
+            { word: "Electricity", greek: true },
+            { word: "Mathematics", greek: true },
+            { word: "Theater", greek: true },
+            { word: "Alphabet", greek: true }
+        ];
+        
+        function getRandomWords() {
+            let shuffled = words.sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, 10);
+        }
+        
+        function displayWords() {
+            const wordListDiv = document.getElementById("word-list");
+            wordListDiv.innerHTML = "";
+            selectedWords = getRandomWords();
+            correctWordsCount = selectedWords.filter(word => word.greek).length;
+            selectedWords.forEach((item, index) => {
+                let label = document.createElement("label");
+                label.innerHTML = `<input type='checkbox' id='word${index}'> <span id='text${index}'>${item.word}</span>`;
+                label.className = "word";
+                wordListDiv.appendChild(label);
+            });
+            document.getElementById("result").innerText = "";
+        }
+        
+        function checkAnswers() {
+            let score = 0;
+            let correctSelections = 0;
+            selectedWords.forEach((item, index) => {
+                let checkbox = document.getElementById(`word${index}`);
+                let wordText = document.getElementById(`text${index}`);
+                if (checkbox.checked && item.greek) {
+                    score++;
+                    correctSelections++;
+                    wordText.classList.add("correct");
+                } else if (checkbox.checked && !item.greek) {
+                    score--;
+                    wordText.classList.add("incorrect");
+                }
+                if (item.greek && !checkbox.checked) {
+                    wordText.classList.add("correct");
+                }
+            });
+            document.getElementById("result").innerText = `Your score: ${score} (Correct selections: ${correctSelections} / ${correctWordsCount})`;
+        }
+        
+        function resetGame() {
+            displayWords();
+        }
+        
+        let selectedWords = [];
+        let correctWordsCount = 0;
+        displayWords();
+    </script>
+</body>
+</html>
